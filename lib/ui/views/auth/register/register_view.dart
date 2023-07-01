@@ -1,23 +1,23 @@
 import 'package:chat_client/core/services/navigation_service.dart';
-import 'package:chat_client/core/viewmodels/auth/login_viewmodel.dart';
-import 'package:chat_client/ui/views/auth/register/register_view.dart';
+import 'package:chat_client/core/viewmodels/auth/register_viewmodel.dart';
+import 'package:chat_client/ui/views/auth/login/login_view.dart';
 import 'package:chat_client/ui/views/base_view.dart';
 import 'package:chat_client/ui/widgets/button/circle_button.dart';
 import 'package:chat_client/ui/widgets/common/base_widget.dart';
 import 'package:chat_client/ui/widgets/textfield/filled_textfield.dart';
 import 'package:flutter/material.dart';
 
-class LoginView extends StatefulWidget {
-  const LoginView({super.key});
+class RegisterView extends StatefulWidget {
+  const RegisterView({super.key});
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  State<RegisterView> createState() => _RegisterViewState();
 }
 
-class _LoginViewState extends BaseWidget<LoginView> {
+class _RegisterViewState extends BaseWidget<RegisterView> {
   @override
   Widget build(BuildContext context) {
-    return BaseView<LoginViewModel>(
+    return BaseView<RegisterViewModel>(
       builder: (context, model, child) {
         return Scaffold(
           backgroundColor: Colors.white,
@@ -32,7 +32,11 @@ class _LoginViewState extends BaseWidget<LoginView> {
                   children: [
                     _buildImage(),
                     SizedBox(height: 50),
-                    _buildForm(onSubmit: model.signIn, controllers: model.form.fields),
+                    _buildForm(
+                        onSubmit: () {
+                          model.register();
+                        },
+                        controllers: model.form.fields),
                   ],
                 ),
               ),
@@ -46,8 +50,8 @@ class _LoginViewState extends BaseWidget<LoginView> {
   Widget _buildImage() {
     return Image(
       width: double.infinity,
-      height: dynamicHeight(.35),
-      fit: BoxFit.cover,
+      height: dynamicHeight(.3),
+      fit: BoxFit.contain,
       image: AssetImage("assets/images/login-illustration.jpg"),
     );
   }
@@ -56,14 +60,14 @@ class _LoginViewState extends BaseWidget<LoginView> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("Hesabınız yok mu?"),
+        Text("Zaten hesabın var mı?"),
         SizedBox(width: 5),
         GestureDetector(
           onTap: () {
-            NavigationService.replaceScreen(RegisterView());
+            NavigationService.replaceScreen(LoginView());
           },
           child: Text(
-            "kayıt ol.",
+            "giriş yap.",
             style: TextStyle(
               fontWeight: FontWeight.w500,
               color: themeData.primaryColor,
@@ -79,7 +83,7 @@ class _LoginViewState extends BaseWidget<LoginView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Giriş Yap",
+          "Kayıt Ol",
           style: TextStyle(
             fontWeight: FontWeight.w600,
             color: themeData.primaryColor,
@@ -88,7 +92,7 @@ class _LoginViewState extends BaseWidget<LoginView> {
         ),
         SizedBox(height: 10),
         Text(
-          "Giriş yapabilmek için lütfen formu doldurunuz.",
+          "Kayıt olmak için lütfen formu doldurunuz.",
           style: TextStyle(
             fontSize: 15,
             color: Colors.grey.shade600,
@@ -108,6 +112,13 @@ class _LoginViewState extends BaseWidget<LoginView> {
             _buildFormTile(),
             SizedBox(height: 30),
             FilledTextField(
+              title: "Kullanıcı Adı",
+              controller: controllers["userName"],
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            FilledTextField(
               title: "E-posta Adresi",
               controller: controllers["email"],
             ),
@@ -121,9 +132,9 @@ class _LoginViewState extends BaseWidget<LoginView> {
             ),
             SizedBox(height: 30),
             CircleButton(
-              title: "Giriş Yap",
+              title: "Kayıt Ol",
               icon: Icon(
-                Icons.login,
+                Icons.person,
                 color: Colors.white,
               ),
               onPress: onSubmit,

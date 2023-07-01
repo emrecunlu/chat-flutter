@@ -38,6 +38,9 @@ dependencies:
   dio: ^5.2.1+1
   get_it: ^7.6.0
   json_annotation: ^4.8.1
+  shared_preferences: ^2.2.0
+  jwt_decoder: ^2.0.1
+  socket_io_client: ^2.0.2
 
 dev_dependencies:
   flutter_test:
